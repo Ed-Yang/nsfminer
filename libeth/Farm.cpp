@@ -364,6 +364,9 @@ void Farm::submitProofAsync(Solution const& _s) {
         cnote << "Submit time: "
               << chrono::duration_cast<chrono::microseconds>(chrono::steady_clock::now() - _s.tstamp).count() << " us.";
 #endif
+    if (_s.nonce)
+        cnote << EthWhite "Solution difficulty: "
+              << dev::getFormattedHashes(dev::getHashesToTarget(r.value.hex(HexPrefix::Add)));
 }
 
 // Collects data about hashing and hardware status
