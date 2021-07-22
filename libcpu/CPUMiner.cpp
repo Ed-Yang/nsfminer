@@ -177,7 +177,7 @@ void CPUMiner::search(const dev::eth::WorkPackage& w) {
 
         auto r = ethash::search(context, header, boundary, nonce, blocksize);
         if (r.solution_found) {
-            h256 mix{reinterpret_cast<byte*>(r.mix_hash.bytes), h256::ConstructFromPointer};
+            h256 mix{reinterpret_cast<uint8_t*>(r.mix_hash.bytes), h256::ConstructFromPointer};
             auto sol = Solution{r.nonce, mix, w, chrono::steady_clock::now(), m_index};
 
             cnote << EthWhite << "Job: " << w.header.abridged() << " Solution: " << toHex(sol.nonce, HexPrefix::Add);
@@ -204,6 +204,7 @@ void CPUMiner::workLoop() {
         // Wait for work or 3 seconds (whichever the first)
         const WorkPackage w = work();
         if (!w) {
+            m_hung_miner.store(false);
             unique_lock<mutex> l(miner_work_mutex);
             m_new_work_signal.wait_for(l, chrono::seconds(3));
             continue;
@@ -226,6 +227,7 @@ void CPUMiner::workLoop() {
         current = w;
 
         // Start searching
+        m_hung_miner.store(false);
         search(w);
     }
 }
