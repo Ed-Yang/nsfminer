@@ -1,0 +1,72 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "(gdb) Attach",
+            "type": "cppdbg",
+            "request": "attach",
+            "program": "${workspaceFolder}/build/nsfminer/nsfminer",
+            "processId": "${command:pickProcess}",
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "(gdb) nsf-amd",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/nsfminer/nsfminer",
+            "args": [
+                "--devices", "0", "1", 
+                "-P", "stratum1+tcp://0xf6Daa81109Dc170e4145D8661c3f50A1E32D348b.nsf-amd@us1.ethermine.org:4444",
+                "--HWMON", "2", "--api-port", "3333", "--retry-max", "0", "--retry-delay", "5"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [
+                // {"name":"GPU_DEVICE_ORDINAL", "value":"0,1"}
+            ],
+            "env": {
+            },
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "(gdb) nsfminer",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/nsfminer/nsfminer",
+            "args": [
+                "-P", "stratum1+tcp://0xf6Daa81109Dc170e4145D8661c3f50A1E32D348b.nsf-all@us1.ethermine.org:4444",
+                "--HWMON", "2", "--api-port", "3333", "--tstop", "90", "--tstart", "80"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+    ]
+}
