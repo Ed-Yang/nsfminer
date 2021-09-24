@@ -613,6 +613,13 @@ void EthStratumClient::processResponse(Json::Value& responseObject) {
     _method = responseObject.get("method", "").asString();
     _isNotification = (_method != "" || _id == unsigned(0));
 
+#if 1 // edward. check m_conn or will exception on connection disconnected
+    if (!isConnected() || m_conn == nullptr) {
+        cwarn << "connection is broken !!!";
+        return;
+    }
+#endif
+
     // Notifications of new jobs are like responses to get_work requests
     if (_isNotification && _method == "" && m_conn->StratumMode() == EthStratumClient::ETHPROXY &&
         responseObject["result"].isArray()) {
